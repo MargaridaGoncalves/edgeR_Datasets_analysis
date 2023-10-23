@@ -1,0 +1,18 @@
+Retrieved from: 
+
+Tuch, B.B., Laborde, R.R., Xu, X., Gu, J., Chung, C.B., Monighetti, C.K., Stanley, S.J.,
+Olsen, K.D., Kasperbauer, J.L., Moore, E.J., Broomer, A.J., Tan, R., Brzoska, P.M.,
+Muller, M.W., Siddiqui, A.S., Asmann, Y.W., Sun, Y., Kuersten, S., Barker, M.A.,
+Vega, F.M.D.L., and Smith, D.I. (2010). Tumor transcriptome sequencing reveals allelic
+expression imbalances associated with copy number alterations. PLoS ONE 5, e9317.
+
+Normalized transcript:
+
+In https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0009317#pone.0009317.s009 
+it is possible to find:
+
+Table S1:
+Normalized transcript counts and differential (tumor versus normal) transcript expression values measured by RNA-Seq.
+
+https://doi.org/10.1371/journal.pone.0009317.s009
+In this file we can find the raw counts too.
