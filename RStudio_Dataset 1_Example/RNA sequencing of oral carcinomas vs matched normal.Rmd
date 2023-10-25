@@ -5,7 +5,7 @@ output:
   html_notebook: default
 ---
 
-## This example is a remake of the example presented in the edgeR documentation
+## This example is a remake of the example (4.1) presented in the edgeR documentation
 
 
 ```{r}
@@ -125,32 +125,67 @@ y$genes$EntrezGene <- NULL
 
 ## TMM normalization
 
+Given that we are not being explicit in which method is being used with the argument: method = " ", the normalization is set to be default method: the TMM.
+
 ```{r}
-y <- normLibSizes(y)
-y$samples
+y1 <- normLibSizes(y)
+y1$samples
+
+getNormLibSizes(y1) # = lib.size * norm.factors
 ```
+
+Other normalization methods could be used:
+
+```{r}
+y2 <- normLibSizes(y, method = "none")
+y2$samples
+
+y3 <- normLibSizes(y, method = "TMMwsp")
+y3$samples
+
+y4 <- normLibSizes(y, method = "RLE")
+y4$samples
+
+y5 <- normLibSizes(y, method = "upperquartile")
+y5$samples
+
+
+y6 <- normLibSizes(y, method = "upperquartile", p = 0.75)
+y6$samples
+
+## It is perceptible that if we do not specify the argument p value it is used the default one: p= 0.75
+
+y7 <- normLibSizes(y, method = "upperquartile", p = 0.50)
+y7$samples
+
+
+y8 <- normLibSizes(y, method = "upperquartile", p = 0.90)
+y8$samples
+```
+
 
 ## Data exploration
 
-The first step of an analysis should be to examine the samples for outliers and for other
-relationships. The function plotMDS produces a plot in which distances between samples
-correspond to leading biological coefficient of variation (BCV) between those samples:
+The first step of an analysis should be to examine the samples for outliers and for other relationships. The function plotMDS produces a plot in which distances between samples correspond to leading biological coefficient of variation (BCV) between those samples:
 
 ```{r}
-plotMDS(y)
+plotMDS(y1)
+plotMDS(y2)
+plotMDS(y3)
+plotMDS(y4)
+plotMDS(y5)
 ```
 ## plotMDS
 ## PLOT INTERPRETATION
 
-In the plot, dimension 1 separates the tumor from the normal samples, while dimension 2
-roughly corresponds to patient number. This confirms the paired nature of the samples. The
-tumor samples appear more heterogeneous than the normal samples.
+In the plot, dimension 1 separates the tumor from the normal samples, while dimension 2 roughly corresponds to patient number. 
+
+This confirms the paired nature of the samples. The tumor samples appear more heterogeneous than the normal samples. (Visible even without normalization)
 
 
 ## Design Matrix
 
-Before we fit negative binomial GLMs, we need to define our design matrix based on the
-experimental design.
+Before we fit negative binomial GLMs, we need to define our design matrix based on the experimental design.
 
 Here we want to test for differential expression between tumour and normal tissues within patients, i.e. adjusting for differences between patients. In statistical terms, this is an additive linear model with patient as the blocking factor:
 
@@ -158,17 +193,17 @@ Here we want to test for differential expression between tumour and normal tissu
 
 Patient <- factor(c(8,8,33,33,51,51))
 Tissue <- factor(c("N","T","N","T","N","T"))
-data.frame(Sample=colnames(y),Patient,Tissue)
+data.frame(Sample=colnames(y1),Patient,Tissue)
 
 design <- model.matrix(~Patient+Tissue)
-rownames(design) <- colnames(y)
-design
+rownames(design) <- colnames(y1)
+design 
 ```
 # Dispersion estimation
 
 ```{r}
-y <- estimateDisp(y, design, robust=TRUE)
-y$common.dispersion
+y1 <- estimateDisp(y1, design, robust=TRUE)
+y1$common.dispersion
 ```
 
 The square root of the common dispersion gives the coefficient of variation of biological
@@ -178,7 +213,7 @@ The dispersion estimates can be viewed in a BCV plot:
 
 
 ```{r}
-plotBCV(y)
+plotBCV(y1)
 ```
 
 ## Differential expression
@@ -186,7 +221,7 @@ plotBCV(y)
 Now proceed to determine differentially expressed genes. Fit genewise glms:
 
 ```{r}
-fit <- glmFit(y, design)
+fit <- glmFit(y1, design)
 ```
 
 Conduct likelihood ratio tests for tumour vs normal tissue differences and show the top genes:
@@ -211,7 +246,7 @@ Here’s a closer look at the counts-per-million in individual samples for the t
 
 ```{r}
 o <- order(lrt$table$PValue)
-cpm(y)[o[1:10],]
+cpm(y1)[o[1:10],]
 ```
 We see that all the top genes have consistent tumour vs normal changes for the three patients.
 The total number of differentially expressed genes at 5% FDR is given by:
@@ -230,8 +265,7 @@ abline(h=c(-1, 1), col="blue")
 
 
 We perform a gene ontology analysis focusing on the ontology of biological process (BP).
-The genes up-regulated in the tumors tend to be associated with cell differentiation, cell
-migration and tissue morphogenesis:
+The genes up-regulated in the tumors tend to be associated with cell differentiation, cell migration and tissue morphogenesis:
 
 ```{r}
 go <- goana(lrt)

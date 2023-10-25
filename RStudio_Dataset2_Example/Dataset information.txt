@@ -1,0 +1,19 @@
+
+Data from: Page 53 from the vignette.
+The data is in the NBPSeq package which does not work in R after version 3.5.0. 
+
+Samples were collected in three batches, and adjustment for batch effects proves 
+to be important. The aim of the analysis therefore is to detect genes differentially
+expressed (DE) in response to ΔhrcC challenge, 
+while correcting for any differences between the batches.
+
+Pseudomonas syringae is a bacterium often used to study plant reactions to pathogens. 
+In this experiment, six-week old Arabidopsis plants were inoculated with the ΔhrcC mutant of
+P. syringae, after which total RNA was extracted from leaves. Control plants were inoculated
+with a mock pathogen.
+
+Three biological replicates of the experiment were conducted at separate times and using
+independently grown plants and bacteria.
+
+The six RNA samples were sequenced one per lane on an Illumina Genome Analyzer. Reads
+were aligned and summarized per gene using GENE-counter.
